@@ -1,43 +1,43 @@
 #include <stdio.h>
 #include <cs50.h>
+#include <math.h>
 
-//program determines authenticity of credit card number given
+// Program determines authenticity of credit card number given
+
 int main(void)
 {
+    // Performs checksum on card number typed by end user. If answer to checksum (num[19]) is 0, card may be valid.
     long CC = get_long("Enter Card Number (No spaces or dashes)\n");
-    int a = CC % 10;
-    int b = (CC % 100) / 10;
-    int c = (CC % 1000) / 100;
-    int d = (CC % 10000) / 1000;
-    int e = (CC % 100000) / 10000;
-    int f = (CC % 1000000) / 100000;
-    int g = (CC % 10000000) / 1000000;
-    int h = (CC % 100000000) / 10000000;
-    int i = (CC % 1000000000) / 100000000;
-    int j = (CC % 10000000000) / 1000000000;
-    int k = (CC % 100000000000) / 10000000000;
-    int l = (CC % 1000000000000) / 100000000000;
-    int m = (CC % 10000000000000) / 1000000000000;
-    int n = (CC % 100000000000000) / 10000000000000;
-    int o = (CC % 1000000000000000) / 100000000000000;
-    int p = (CC % 10000000000000000) / 1000000000000000;
-    int q = (CC % 100000000000000000) / 10000000000000000;
-    int r = (CC % 1000000000000000000) / 100000000000000000;
-    int s = (CC % (1000000000000000000 / 10)) / 1000000000000000000;
-    int t = (((b * 2) % 10) + ((b * 2) /10) + ((d * 2) % 10) + ((d * 2) /10) + ((f * 2) % 10) + ((f * 2) /10) + ((h * 2) % 10) + ((h * 2) /10) + ((j * 2) % 10) + ((j * 2) /10) + ((l * 2) % 10) + ((l * 2) /10) + ((n * 2) % 10) + ((n * 2) /10) + ((p * 2) % 10) + ((p * 2) /10) + a + c + e + g + i + k + m + o);
-    if ((t % 10) == 0)
+    long num[20];
+    for (long i = 0, x = 1; i < 18; i++, x = x * 10)
     {
-        //Visa 13
-        if (s == 0 && r == 0 && q == 0 && p == 0 && o == 0 && n == 0 && m == 4)
+        num[i + 0] = CC / x % 10;
+    }
+    num[18] = (int)(CC / pow(10, 9) / pow(10, 9)) % 10;
+    num[19] = (((num[1] * 2) % 10) + ((num[1] * 2) / 10) + ((num[3] * 2) % 10) 
+                  + ((num[3] * 2) / 10) + ((num[5] * 2) % 10) + ((num[5] * 2) /
+                      10) + ((num[7] * 2) % 10) + ((num[7] * 2) / 10) + ((num[9
+                          ] * 2) % 10) + ((num[9] * 2) / 10) + ((num[11] * 2) %
+                              10) + ((num[11] * 2) / 10) + ((num[13] * 2) % 10)
+                                  + ((num[13] * 2) / 10) + ((num[15] * 2) % 10)
+                                      + ((num[15] * 2) / 10) + num[0] + num[2] 
+                                          + num[4] + num[6] + num[8] + num[10] 
+                                              + num[12] + num[14]);
+
+    // If checksum calculates potentially valid card number, below will determine which company, if any, carries the card.
+    if ((num[19] % 10) == 0)
+    {
+        // Visa (13 digits)
+        if (num[18] == 0 && num[17] == 0 && num[16] == 0 && num[15] == 0 && num[14] == 0 && num[13] == 0 && num[12] == 4)
         {
             printf("VISA\n");
         }
-        //AMEX
-        else if (s == 0 && r == 0 && q == 0 && p == 0)
+        // AMEX
+        else if (num[18] == 0 && num[17] == 0 && num[16] == 0 && num[15] == 0)
         {
-            if (o == 3)
+            if (num[14] == 3)
             {
-                if (n == 4 || n == 7)
+                if (num[13] == 4 || num[13] == 7)
                 {
                     printf("AMEX\n");
                 }
@@ -51,13 +51,13 @@ int main(void)
                 printf("INVALID\n");
             }
         }
-        //MasterCard and Visa 16
-        else if (s == 0 && r == 0 && q == 0)
+        // MasterCard and Visa (16 digits)
+        else if (num[18] == 0 && num[17] == 0 && num[16] == 0)
         {
-            //MasterCard alone
-            if (p == 5)
+            // MasterCard alone
+            if (num[15] == 5)
             {
-                if (o > 0 && o < 6)
+                if (num[14] > 0 && num[14] < 6)
                 {
                     printf("MASTERCARD\n");
                 }
@@ -66,8 +66,8 @@ int main(void)
                     printf("INVALID\n");
                 }
             }
-            //Visa 16
-            else if (p == 4)
+            // Visa (16 digits)
+            else if (num[15] == 4)
             {
                 printf("VISA\n");
             }
