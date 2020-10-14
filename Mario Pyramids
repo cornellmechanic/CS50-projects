@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <cs50.h>
+
+void space(int n);
+
+void brick(int n);
+
+int main(void)
+{
+    int x;
+    do
+    {
+        x = get_int("How large are the Great Pyrimids of Mario? (1-8)\n");
+    }
+    while (x > 8 || x < 1);
+    for (int i = 1; i <= x; i++)
+    {
+        space(x - i);
+        brick(i);
+        printf("  ");
+        brick(i);
+        printf("\n");
+    }
+}
+
+void space(int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        printf(" ");
+    }
+}
+
+void brick(int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        printf("#");
+    }
+}
