@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <cs50.h>
 
+// Creates pyramids of inputted dimensions using #'s
+
 void space(int n);
 
 void brick(int n);
